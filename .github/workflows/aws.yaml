@@ -51,6 +51,12 @@ jobs:
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
+        
+      - name: Stop and remove old container
+        run: |
+          docker ps -q --filter "publish=5000" | xargs -r docker stop
+          docker ps -aq --filter "publish=5000" | xargs -r docker rm
+
 
       - name: Run Docker Image to serve users
         run: |
